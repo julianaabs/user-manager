@@ -6,6 +6,8 @@ use App\Application\ResponseEmitter\ResponseEmitter;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -67,7 +69,41 @@ $app->addRoutingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, false, false);
 $errorMiddleware->setDefaultErrorHandler($errorHandler);
 
-// Run App & Emit Response
-$response = $app->handle($request);
-$responseEmitter = new ResponseEmitter();
-$responseEmitter->emit($response);
+//// Run App & Emit Response
+//$response = $app->handle($request);
+//$responseEmitter = new ResponseEmitter();
+//$responseEmitter->emit($response);
+
+$container->set('db', function ($container) {
+    $capsule = new \Illuminate\Database\Capsule\Manager();
+    $capsule->addConnection($container->get('settings')['db']);
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+    return $capsule;
+});
+
+$container->set('view', function () use ($container) {
+    return \Slim\Views\Twig::create(__DIR__ . '/../resources/views', [
+        'cache' => false
+    ]);
+
+});
+
+$container->set('HomeController', function ($container) {
+    return new \App\Controllers\HomeController($container->get('view'));
+});
+
+//$app->add(\Slim\Views\TwigMiddleware::createFromContainer($app));
+
+$app->run();
+
+//
+//$app = new \Slim\App($responseFactory);
+//$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
+//    $name = $args['name'];
+//    $response->getBody()->write("Hello, $name");
+//
+//    return $response;
+//});
+//$app->run();

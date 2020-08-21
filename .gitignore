@@ -5,5 +5,5 @@
 /logs/*
 !/logs/README.md
 .phpunit.result.cache
-.env
+app/.env
 public/tests

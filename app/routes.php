@@ -9,18 +9,19 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    $app->options('/{routes:.*}', function (Request $request, Response $response) {
+    $app->options('/{routes:.*}', function ($request, $response) {
         // CORS Pre-Flight OPTIONS Request Handler
         return $response;
     });
 
-    $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Hello world!');
-        return $response;
-    });
+    $app->get('/', \App\Controllers\HomeController::class . ':index');
+
+//    $app->get('/home', function () {
+//        return 'Home';
+//    });
 
     $app->group('/users', function (Group $group) {
-        $group->get('', ListUsersAction::class);
+        $group->get('', 'UserController:index');
         $group->get('/{id}', ViewUserAction::class);
     });
 };

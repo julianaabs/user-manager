@@ -24,5 +24,15 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
+//        $containerBuilder->addDefinitions([
+//            'db' => function ($container) {
+//                $capsule = new \Illuminate\Database\Capsule\Manager();
+//                $capsule->addConnection($container->get('settings.db'));
+//                $capsule->setAsGlobal();
+//                $capsule->bootEloquent();
+//
+//                return $capsule;
+//            }
+//        ])
     ]);
 };
