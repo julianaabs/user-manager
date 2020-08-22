@@ -73,13 +73,22 @@ $errorMiddleware->setDefaultErrorHandler($errorHandler);
 //$response = $app->handle($request);
 //$responseEmitter = new ResponseEmitter();
 //$responseEmitter->emit($response);
+//
+//$container->set('db', function ($container) {
+//    $capsule = new \Illuminate\Database\Capsule\Manager();
+//    $capsule->addConnection($container->get('settings')['db']);
+//    $capsule->setAsGlobal();
+//    $capsule->bootEloquent();
+//
+//    return $capsule;
+//});
 
-$container->set('db', function ($container) {
-    $capsule = new \Illuminate\Database\Capsule\Manager();
-    $capsule->addConnection($container->get('settings')['db']);
-    $capsule->setAsGlobal();
-    $capsule->bootEloquent();
 
+$capsule = new \Illuminate\Database\Capsule\Manager;
+$capsule->addConnection($container->get('settings')['db']);
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+$container->set('db', function ($container) use ($capsule) {
     return $capsule;
 });
 
@@ -94,8 +103,7 @@ $container->set('HomeController', function ($container) {
     return new \App\Controllers\HomeController($container->get('view'));
 });
 
-//$app->add(\Slim\Views\TwigMiddleware::createFromContainer($app));
-
+$app->add(\Slim\Views\TwigMiddleware::createFromContainer($app));
 $app->run();
 
 //

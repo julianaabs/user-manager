@@ -14,7 +14,8 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/', \App\Controllers\HomeController::class . ':index');
+    $app->get('/', \App\Controllers\HomeController::class . ':index')->setName('home');
+    $app->post('/create-user', \App\Controllers\HomeController::class . ':create')->setName('create-user');
 
 //    $app->get('/home', function () {
 //        return 'Home';

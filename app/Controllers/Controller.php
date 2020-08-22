@@ -4,6 +4,7 @@
 namespace App\Controllers;
 
 
+use App\Repositories\BaseRepository;
 use DI\Container;
 
 /**
@@ -18,9 +19,15 @@ class Controller
      */
     protected $container;
 
-    public function __construct(Container $container)
+    /**
+     * @var BaseRepository
+     */
+    protected $repository;
+
+    public function __construct(Container $container, BaseRepository $repository)
     {
         $this->container = $container;
+        $this->repository = $repository;
     }
 
 }
