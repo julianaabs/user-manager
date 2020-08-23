@@ -5,9 +5,14 @@ namespace App\Controllers;
 
 
 use App\Models\User;
-use App\Repositories\UserRepository;
+use App\Validators\BaseValidator;
+use Awurth\SlimValidation\Validator;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Psr7\Request;
+use Respect\Validation\Validator as V;
+
+use Slim\Http\Request;
 
 /**
  * Class UserController
@@ -15,53 +20,43 @@ use Slim\Psr7\Request;
  */
 class UserController extends Controller
 {
-    /**
-     * @var UserRepository
-     */
-    protected $repository;
-
-    public function index($request, ResponseInterface $response)
-    {
-        return $this->container->get('view')->render($response, 'home.twig');
-    }
-
 
     /**
      * @param Request $request
      * @param ResponseInterface $response
      * @return ResponseInterface
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
      */
     public function create(Request $request, ResponseInterface $response)
     {
         $values = $request->getParsedBody();
 
-        $validator = $this->getValidator($request, $values);
+        $validator = $this->getCreateValidator($request, $values);
 
         if ($validator->isValid()) {
-            User::query()->create([
-                'name' => $values['name'],
-                'email' => $values['email'],
-                'password' => password_hash($values['password'], PASSWORD_BCRYPT, ['cost' => 10])
-            ]);
+            try {
+                $user = User::query()->create([
+                    'name' => $values['name'],
+                    'email' => $values['email'],
+                    'password' => password_hash($values['password'], PASSWORD_BCRYPT, ['cost' => 10])
+                ]);
+            } catch (QueryException $exception) {
+                $this->container->flash->addMessage('Register Error', 'Incorrect data, review the fields');
+                return $response->withRedirect($this->container->router->pathFor('home'));
+            }
+
+            $this->container->auth->authenticate(Arr::only($values, ['email', 'password']));
 
         } else {
-            // @todo print errors
-            $errors = $validator->getErrors();
-            var_dump($errors);
-            die;
+            $this->container->flash->addMessage('Register Error', 'Incorrect data, review the fields');
         }
 
-        return $this->container->get('view')->render($response, 'home.twig');
+        return $response->withRedirect($this->container->router->pathFor('home'));
     }
 
     /**
      * @param Request $request
      * @param ResponseInterface $response
      * @return mixed
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
      */
     public function list(Request $request, ResponseInterface $response)
     {
@@ -87,38 +82,44 @@ class UserController extends Controller
     public function getEdit(Request $request, ResponseInterface $response)
     {
         $user = User::query()->find($_SESSION['user']);
-        return $this->container->get('view')->render($response, 'edit.twig', ['user' => $user->getKey()]);
+        return $this->container->get('view')->render($response, 'edit.twig', ['user' => $user]);
     }
 
     /**
      * @param Request $request
      * @param ResponseInterface $response
      * @return mixed
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
      */
     public function update(Request $request, ResponseInterface $response)
     {
         $values = $request->getParsedBody();
+        var_dump($values);
+        unset($values['csrf_name'], $values['csrf_value']);
 
-        $validator = $this->getValidator($request, $values);
+        try {
+            User::query()->where('id', $_SESSION['user'])->update($values);
+        } catch (\Exception $exception) {
+            $this->container->flash->addMessage('Edit Error', 'Error editing, review the fields.');
+            return $response->withRedirect($this->container->router->pathFor('get-edit'));
+        }
 
-        $user = User::query()->find($_SESSION['user']);
+        return $response->withRedirect($this->container->router->pathFor('home'));
 
-        $this->repository->setModel($user);
+    }
 
-//        if ($validator->isValid()) {
-//            $this->repository->update($values, $user->getKey());
-//
-//        } else {
-//            // @todo print errors
-//            $errors = $validator->getErrors();
-//            var_dump($errors);
-//            die;
-//        }
+    /**
+     * @param Request $request
+     * @param ResponseInterface $response
+     * @return mixed
+     */
+    public function delete(Request $request, ResponseInterface $response)
+    {
+        $values = $request->getParsedBody();
+        unset($values['csrf_name'], $values['csrf_value']);
 
+        User::query()->where('id', $_SESSION['user'])->update($values);
 
-        return $this->container->get('view')->render($response, 'home.twig');
+        return $response->withRedirect($this->container->router->pathFor('home'));
 
     }
 

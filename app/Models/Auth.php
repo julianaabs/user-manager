@@ -55,8 +55,6 @@ class Auth
             }
         }
 
-        var_dump($user);
-
         return false;
 
     }

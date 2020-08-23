@@ -1,42 +1,36 @@
-# Slim Framework 4 Skeleton Application
+# User Manager Application
 
-[![Coverage Status](https://coveralls.io/repos/github/slimphp/Slim-Skeleton/badge.svg?branch=master)](https://coveralls.io/github/slimphp/Slim-Skeleton?branch=master)
+User Manager é uma aplicação de gerenciamento de usuários desenvolvida utilizando Slim Framework 3 e Twig.
+O sistema tem funcionalidades de criar um usuário, fazer login, visualizar os usuários cadastrados, editar e deletar o usuário autenticado.
 
-Use this skeleton application to quickly setup and start working on a new Slim Framework 4 application. This application uses the latest Slim 4 with Slim PSR-7 implementation and PHP-DI container implementation. It also uses the Monolog logger.
+## Instalar Aplicação
 
-This skeleton application was built for Composer. This makes setting up a new Slim Framework application quick and easy.
+Para funcionamento do sistema é necessário PHP (>=7.4) e [Composer](https://getcomposer.org/)
 
-## Install the Application
+Clone o repositório do git na sua máquina.
 
-Run this command from the directory in which you want to install your new Slim Framework application.
-
+Execute o seguinte comando no terminal:
 ```bash
-composer create-project slim/slim-skeleton [my-app-name]
+composer install
+```
+No diretório /public no terminal, rode o seguinte comando:
+```bash
+php -S localhost:8080
 ```
 
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
+## Funcionalidades Implementadas
 
-* Point your virtual host document root to your new application's `public/` directory.
-* Ensure `logs/` is web writable.
+* Criação de um usuário
+* Login de usuário
+* Edição de usuário
+* Listagem de usuários
+* Logout
 
-To run the application in development, you can run these commands 
+## TO DO
 
-```bash
-cd [my-app-name]
-composer start
-```
+* Adicionar um SessionMiddleware para restringir o acesso das urls
+* Deletar usuário
+* Paginação da listagem
+* Deixar erros de validação mais verbosos
+* Testes unitários
 
-Or you can use `docker-compose` to run the app with `docker`, so you can run these commands:
-```bash
-cd [my-app-name]
-docker-compose up -d
-```
-After that, open `http://localhost:8080` in your browser.
-
-Run this command in the application directory to run the test suite
-
-```bash
-composer test
-```
-
-That's it! Now go build something cool.

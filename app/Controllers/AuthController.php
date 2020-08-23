@@ -4,9 +4,8 @@
 namespace App\Controllers;
 
 
-use App\Repositories\UserRepository;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Psr7\Request;
+use Slim\Http\Request;
 
 /**
  * Class AuthController
@@ -14,32 +13,26 @@ use Slim\Psr7\Request;
  */
 class AuthController extends Controller
 {
-    /**
-     * @var UserRepository
-     */
-    protected $repository;
-
-
 
     /**
      * @param Request $request
-     * @param ResponseInterface $response
      * @return ResponseInterface
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function login(Request $request, ResponseInterface $response)
+    public function login(Request $request, $response)
     {
-        $values = $request->getParsedBody();
-        $auth = $this->container->get('auth')->authenticate($values);
+        $values = $request->getParams();
+        $auth = $this->container->auth->authenticate($values);
 
         if (!$auth) {
-            $flash = $this->container->get('flash')->addMessage('Authentication Error', 'Email and Password doesn\'t match.');
-            return $this->container->get('view')->render($response, 'home.twig');
+            $this->container->flash->addMessage('Authentication Error', 'Email and Password doesn\'t match.');
+            return $response->withRedirect($this->container->router->pathFor('get-login'));
 
         }
 
-        return $this->container->get('view')->render($response, 'home.twig');
+        $this->container->flash->addMessage('Login Successful', 'Login Successful.');
+        return $response->withRedirect($this->container->router->pathFor('home'));
 
     }
 
@@ -65,7 +58,7 @@ class AuthController extends Controller
     public function logout(Request $request, ResponseInterface $response)
     {
         $this->container->get('auth')->logout();
-        return $this->getLogin($request, $response);
+        return $response->withRedirect($this->container->router->pathFor('get-login'));
     }
 
 
