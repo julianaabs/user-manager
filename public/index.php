@@ -69,21 +69,10 @@ $app->addRoutingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, false, false);
 $errorMiddleware->setDefaultErrorHandler($errorHandler);
 
-//// Run App & Emit Response
-//$response = $app->handle($request);
-//$responseEmitter = new ResponseEmitter();
-//$responseEmitter->emit($response);
-//
-//$container->set('db', function ($container) {
-//    $capsule = new \Illuminate\Database\Capsule\Manager();
-//    $capsule->addConnection($container->get('settings')['db']);
-//    $capsule->setAsGlobal();
-//    $capsule->bootEloquent();
-//
-//    return $capsule;
-//});
 
-
+/**
+ * Configuring database.
+ */
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($container->get('settings')['db']);
 $capsule->setAsGlobal();
@@ -92,18 +81,63 @@ $container->set('db', function ($container) use ($capsule) {
     return $capsule;
 });
 
-$container->set('view', function () use ($container) {
-    return \Slim\Views\Twig::create(__DIR__ . '/../resources/views', [
+$container->set('csrf', function () use ($responseFactory) {
+    session_start();
+    return new Slim\Csrf\Guard($responseFactory);
+});
+
+
+$container->set('auth', function () {
+    return new \App\Models\Auth();
+});
+/**
+ * Configuring views.
+ */
+$container->set('view', function () use ($container, $app) {
+    $view = \Slim\Views\Twig::create(__DIR__ . '/../resources/views', [
         'cache' => false
     ]);
 
+    $view->addExtension(new \App\Infrastructure\Extensions\CsrfExtension($container->get('csrf')));
+
+    $view->getEnvironment()->addGlobal('auth', [
+        'logged' => $container->get('auth')->logged(),
+        'me' => $container->get('auth')->me()
+    ]);
+
+    return $view;
+
 });
 
-$container->set('HomeController', function ($container) {
-    return new \App\Controllers\HomeController($container->get('view'));
+$container->set('flash',  function () {
+    return new \Slim\Flash\Messages();
 });
+
+$container->set('repository', function () {
+    return new \App\Repositories\BaseRepository();
+});
+
+
+/**
+ * Configuring validator.
+ */
+$container->set('validator', function () {
+    return new Awurth\SlimValidation\Validator();
+});
+
+/**
+ * Configuring Controllers
+ */
+$container->set('HomeController', function ($container) {
+    return new \App\Controllers\HomeController($container->get('view'), $container->get('repository'));
+});
+
+//$container->set('router', function () use ($routes, $app) {
+//    return new \Illuminate\Support\Facades\Route($routes($app));
+//});
 
 $app->add(\Slim\Views\TwigMiddleware::createFromContainer($app));
+$app->add($container->get('csrf'));
 $app->run();
 
 //

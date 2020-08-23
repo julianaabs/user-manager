@@ -4,57 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "875b65a4f48e1bee025e64cd96035f7a",
+    "content-hash": "11119b11e40848773cb6f73a11d6cce1",
     "packages": [
         {
-            "name": "davidepastore/slim-validation",
-            "version": "v0.5.1",
+            "name": "awurth/slim-validation",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/DavidePastore/Slim-Validation.git",
-                "reference": "c28d6e2545dab51c9c4330d4db1dc55a75632f56"
+                "url": "https://github.com/awurth/SlimValidation.git",
+                "reference": "c38f7b54767c79a4f031d99a486967f49f0518e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DavidePastore/Slim-Validation/zipball/c28d6e2545dab51c9c4330d4db1dc55a75632f56",
-                "reference": "c28d6e2545dab51c9c4330d4db1dc55a75632f56",
+                "url": "https://api.github.com/repos/awurth/SlimValidation/zipball/c38f7b54767c79a4f031d99a486967f49f0518e7",
+                "reference": "c38f7b54767c79a4f031d99a486967f49f0518e7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.0",
+                "php": "^7.0",
                 "psr/http-message": "^1.0",
-                "respect/validation": "^1.0"
+                "respect/validation": "^1.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0",
-                "scrutinizer/ocular": "~1.1",
-                "slim/slim": "~3.0"
+                "phpunit/phpunit": "^6.3",
+                "slim/slim": "^3.8",
+                "slim/twig-view": "^2.2"
+            },
+            "suggest": {
+                "slim/twig-view": "Needed to be able to use the Twig Extension with Slim",
+                "twig/twig": "Needed to be able to use the Twig Extension"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "DavidePastore\\Slim\\Validation\\": "src"
+                    "Awurth\\SlimValidation\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0+"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Davide Pastore",
-                    "email": "pasdavide@gmail.com"
+                    "name": "Alexis Wurth",
+                    "email": "awurth.dev@gmail.com",
+                    "homepage": "https://github.com/awurth"
                 }
             ],
-            "description": "A slim middleware for validation based on Respect/Validation",
+            "description": "A validator for the Slim PHP Micro-Framework",
+            "homepage": "https://github.com/awurth/SlimValidation",
             "keywords": [
-                "framework",
-                "middleware",
+                "respect",
                 "slim",
                 "validation",
                 "validator"
             ],
-            "time": "2018-08-14T20:30:55+00:00"
+            "time": "2020-04-10T19:40:51+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1431,6 +1436,107 @@
                 "validator"
             ],
             "time": "2019-05-28T06:10:06+00:00"
+        },
+        {
+            "name": "slim/csrf",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slimphp/Slim-Csrf.git",
+                "reference": "827c915a4cc93f1749f5a2556c33f3c86917a9ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slimphp/Slim-Csrf/zipball/827c915a4cc93f1749f5a2556c33f3c86917a9ea",
+                "reference": "827c915a4cc93f1749f5a2556c33f3c86917a9ea",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0",
+                "psr/http-server-handler": "^1.0",
+                "psr/http-server-middleware": "^1.0"
+            },
+            "require-dev": {
+                "phpspec/prophecy": "^1.8",
+                "phpunit/phpunit": "^7.5",
+                "squizlabs/php_codesniffer": "^3.4.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Slim\\Csrf\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Lockhart",
+                    "email": "hello@joshlockhart.com",
+                    "homepage": "http://joshlockhart.com"
+                }
+            ],
+            "description": "Slim Framework 4 CSRF protection PSR-15 middleware",
+            "homepage": "http://slimframework.com",
+            "keywords": [
+                "csrf",
+                "framework",
+                "middleware",
+                "slim"
+            ],
+            "time": "2019-09-13T14:32:01+00:00"
+        },
+        {
+            "name": "slim/flash",
+            "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slimphp/Slim-Flash.git",
+                "reference": "9aaff5fded3b54f4e519ec3d4ac74d3d1f2cbbbc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slimphp/Slim-Flash/zipball/9aaff5fded3b54f4e519ec3d4ac74d3d1f2cbbbc",
+                "reference": "9aaff5fded3b54f4e519ec3d4ac74d3d1f2cbbbc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Slim\\Flash\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Lockhart",
+                    "email": "hello@joshlockhart.com",
+                    "homepage": "http://joshlockhart.com"
+                }
+            ],
+            "description": "Slim Framework Flash message service provider",
+            "homepage": "http://slimframework.com",
+            "keywords": [
+                "flash",
+                "framework",
+                "message",
+                "provider",
+                "slim"
+            ],
+            "time": "2017-10-22T10:35:05+00:00"
         },
         {
             "name": "slim/psr7",

@@ -15,17 +15,33 @@ class BaseRepository
     protected $model;
 
     /**
+     * @param Model $model
+     */
+    public function setModel(Model $model): void
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @return Model
+     */
+    public function getModel(): Model
+    {
+        return $this->model;
+    }
+
+    /**
      * @param $value
      * @return Model|null
      */
     public function find($value): ?Model
     {
-        return $this->model::query()->find($value);
+        return $this->getModel()::query()->find($value);
     }
 
     public function getAll()
     {
-        return $this->model::all();
+        return $this->getModel()::all();
     }
 
 }
