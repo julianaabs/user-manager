@@ -5,7 +5,7 @@ namespace App\Validators;
 
 
 use App\Models\User;
-use Respect\Validation\Validator;
+use Awurth\SlimValidation\Validator;
 
 /**
  * Class BaseValidator

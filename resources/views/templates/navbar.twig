@@ -7,29 +7,38 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ path_for('home') }}">Home <span class="sr-only">(current)</span></a>
             </li>
             {% if auth.logged == false %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('get-login') }}">Login</a>
+                <a class="nav-link" href="{{ path_for('get-login') }}">Login</a>
             </li>
             {% endif %}
             {% if auth.logged %}
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('list') }}">Ver Usuários <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ path_for('list') }}">Ver Usuários <span class="sr-only">(current)</span></a>
             </li>
             {% endif %}
 
         </ul>
         <form class="form-inline my-2 my-lg-0">
             {% if auth.logged %}
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('home') }}">{{ auth.me.name }} <span class="sr-only">(current)</span></a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ auth.me.name }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="nav-link" href="{{ path_for('get-edit') }}">Edit</a>
+{#                        <a class="nav-link" href="{{ path_for('get-delete') }}">Delete</a>#}
+{#                        <a class="nav-link" href="{{ path_for('get-edit', { 'id': auth.me.id }) }}">Edit</a>#}
+{#                        <a class="nav-link" href="{{ path_for('get-edit', { 'id': auth.me.id }) }}">Delete</a>#}
+                    </div>
                 </li>
+
             {% endif %}
             {% if auth.logged %}
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('logout') }}">Logout<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ path_for('logout') }}">Logout<span class="sr-only">(current)</span></a>
             </li>
             {% endif %}
         </form>

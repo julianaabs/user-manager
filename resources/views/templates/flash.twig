@@ -1,0 +1,15 @@
+{% if flash.getMessage('Authentication Error') %}
+    <div class="alert alert-danger">{{ flash.getMessage('Authentication Error') | first }}</div>
+{% endif %}
+
+{% if flash.getMessage('Authentication Error') %}
+    <div class="alert alert-success">{{ flash.getMessage('Login Successful') | first }}</div>
+{% endif %}
+
+{% if flash.getMessage('Register Error') %}
+    <div class="alert alert-danger">{{ flash.getMessage('Register Error') | first }}</div>
+{% endif %}
+
+{% if flash.getMessage('Edit Error') %}
+    <div class="alert alert-danger">{{ flash.getMessage('Edit Error') | first }}</div>
+{% endif %}

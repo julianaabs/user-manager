@@ -7,6 +7,10 @@ namespace App\Validators;
 use App\Models\User;
 use Respect\Validation\Rules\AbstractRule;
 
+/**
+ * Class EmailValidation
+ * @package App\Validators
+ */
 class EmailValidation extends AbstractRule
 {
 

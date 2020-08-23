@@ -4,40 +4,40 @@
 namespace App\Controllers;
 
 
-use App\Repositories\BaseRepository;
-use App\Validators\BaseValidator as UserValidator;
-use DI\Container;
-use Slim\Psr7\Request;
+use App\Validators\BaseValidator;
+use Respect\Validation\Validator as UserValidator;
+use Slim\Container;
+use Slim\Http\Request;
 
 /**
  * Class Controller
+ *
+ * Base Controller
  * @package App\Controllers
  */
-class Controller
+abstract class Controller
 {
-
     /**
      * @var Container
      */
     protected $container;
 
-    /**
-     * @var BaseRepository
-     */
-    protected $repository;
-
-    public function __construct(Container $container, BaseRepository $repository)
+    public function __construct(Container $container)
     {
         $this->container = $container;
-        $this->repository = $repository;
 
     }
 
-    public function getValidator(Request $request, array $values)
+    /**
+     * @param Request $request
+     * @param array $values
+     * @return BaseValidator
+     */
+    public function getCreateValidator(Request $request, array $values): BaseValidator
     {
-        return $this->container->get('validator')->validate($request, [
+        return $this->container->validator->validate($request, [
             'name' => UserValidator::length(6, 30)->alpha(),
-            'email' => UserValidator::notBlank()->email(),
+            'email' => UserValidator::noWhitespace()->notEmpty()->email(),
             'password' => [
                 'rules' => UserValidator::length(6, 20),
                 'messages' => [
@@ -50,6 +50,19 @@ class Controller
                     'equals' => 'The passwords doesn\'t match.'
                 ]
             ]
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $values
+     * @return BaseValidator
+     */
+    public function getUpdateValidator(Request $request, array $values): BaseValidator
+    {
+        return $this->container->validator->validate($request, [
+            'name' => UserValidator::length(6, 30)->alpha(),
+            'email' => UserValidator::noWhitespace()->notEmpty()->email(),
         ]);
     }
 
