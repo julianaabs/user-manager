@@ -13,7 +13,20 @@ Execute o seguinte comando no terminal:
 ```bash
 composer install
 ```
-No diretório /public no terminal, rode o seguinte comando:
+
+## Configuração do banco de dados
+
+Para configurar o banco de dados, crie um arquivo .env no diretório de /app preenchendo os campos do seu MySQL de acordo com o arquivo .env.example.
+
+Em seguida, execute o seguinte comando no terminal:
+```bash
+vendor/bin/phinx migrate
+```
+Esse comando é responsável por executar as migrations e criar as tabelas no seu banco de dados.
+
+## Iniciando a aplicação
+
+Por fim, no diretório /public no terminal, rode o seguinte comando:
 ```bash
 php -S localhost:8080
 ```
